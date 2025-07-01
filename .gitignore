@@ -1,0 +1,8 @@
+app/build/
+*.class
+Main.java
+.gradle
+session.vim
+cheats
+requirements
+
