@@ -1,41 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 	<Button
 		android:id="@+id/back_button"
 		android:text="takas"
 		android:textSize="15dp"
-		android:layout_width="100dp"
-		android:layout_height="100dp"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
 		android:layout_margin="15dp"
-		android:layout_alignParentTop="true"
-		android:layout_alignParentLeft="true"/>
+		app:layout_constraintWidth_percent="0.25"
+		app:layout_constraintDimensionRatio="1:1"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintVertical_chainStyle="spread"/>
 	<Button
 		android:id="@+id/statistics_button"
 		android:text="historia"
-		android:textSize="25dp"
-		android:layout_width="150dp"
-		android:layout_height="150dp"
-		android:layout_marginTop="50dp"
-		android:layout_centerHorizontal="true"
-		android:layout_below="@+id/back_button"/>
+		android:textSize="20dp"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		app:layout_constraintWidth_percent="0.33"
+		app:layout_constraintDimensionRatio="1:1"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/back_button"
+		app:layout_constraintBottom_toTopOf="@id/end_button"/>
 	<Button
 		android:id="@+id/end_button"
 		android:text="Lopeta työ"
-		android:textSize="25dp"
-		android:layout_width="150dp"
-		android:layout_height="150dp"
-		android:layout_marginTop="50dp"
-		android:layout_centerHorizontal="true"
-		android:layout_below="@+id/statistics_button"/>
+		android:textSize="20dp"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		app:layout_constraintWidth_percent="0.33"
+		app:layout_constraintDimensionRatio="1:1"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/statistics_button"
+		app:layout_constraintBottom_toTopOf="@id/logout_button"/>
 	<Button
 		android:id="@+id/logout_button"
 		android:text="Kirjaudu ulos"
-		android:textSize="25dp"
-		android:layout_width="150dp"
-		android:layout_height="150dp"
-		android:layout_marginTop="50dp"
-		android:layout_centerHorizontal="true"
-		android:layout_below="@+id/end_button"/>
-</RelativeLayout>
+		android:textSize="20dp"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		app:layout_constraintWidth_percent="0.33"
+		app:layout_constraintDimensionRatio="1:1"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/end_button"
+		app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

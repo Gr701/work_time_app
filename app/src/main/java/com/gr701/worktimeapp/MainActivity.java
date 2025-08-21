@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import android.widget.RelativeLayout;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import android.os.Handler;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 		timer = findViewById(R.id.time_text);
 		startTime = prefs.getLong("startTime", 0);
 		myButton = findViewById(R.id.work_button);
-		RelativeLayout.LayoutParams buttonParams = (RelativeLayout.LayoutParams)myButton.getLayoutParams();
+		ConstraintLayout.LayoutParams buttonParams = (ConstraintLayout.LayoutParams)myButton.getLayoutParams();
 		myButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -63,24 +63,24 @@ public class MainActivity extends AppCompatActivity {
 					}
 					state = "CONFIRM_WORK";
 					myButton.setText("Vahvista");
-					buttonParams.addRule(RelativeLayout.CENTER_HORIZONTAL, 0);
+					buttonParams.horizontalBias = 0f;
 				} else if (state.equals("CONFIRM_WORK")) {
 					state = "WORK";
 					startTime = System.currentTimeMillis();
 					prefs.edit().putString("state", state).apply();
 					prefs.edit().putLong("startTime", startTime).apply();
 					myButton.setText("Aloita tauko");
-					buttonParams.addRule(RelativeLayout.CENTER_HORIZONTAL, 1);
+					buttonParams.horizontalBias = 0.5f;
 					timerHandler.post(timerRunnable);
 				} else if (state.equals("WORK")) {
 					state = "CONFIRM_BRAKE";
 					myButton.setText("Vahvista");
-					buttonParams.addRule(RelativeLayout.CENTER_HORIZONTAL, 0);
+					buttonParams.horizontalBias = 0f;
 				} else if (state.equals("CONFIRM_BRAKE")) {
 					state = "BRAKE";
 					prefs.edit().putString("state", state).apply();
 					myButton.setText("Lopeta tauko");
-					buttonParams.addRule(RelativeLayout.CENTER_HORIZONTAL, 1);
+					buttonParams.horizontalBias = 0.5f;
 					stopTimer();
 					setStaticTimerText();
 				}
