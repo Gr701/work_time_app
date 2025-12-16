@@ -8,7 +8,7 @@ After researching the domain and going through iterations of redesigning the UI 
 
 
 
-| Screenshot 1 | Screenshot 2 | Screenshot 3 |
+| Login | Home | Menu |
 |-------------|-------------|-------------|
 | ![](screenshots/login_screen.jpg) | ![](screenshots/home_screen.jpg) | ![](screenshots/menu_screen.jpg) |
 
