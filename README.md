@@ -1,11 +1,18 @@
 # Work time app
 
-A minimalistic android application written in Java for tracking the working hours. 
+A minimalistic Android application written in Java for tracking work hours. 
 
-The request to make it came from my father who is working as a truck driver. The applications they have to use in their work are often made without consideration of the harsh work environment and constant hurry. They have small buttons, little texts, many colors and poorly planned structure. 
+## Background
 
-After researching the domain and going through iterations of redesigning the UI according to the requirements, I wrote my version of the tool. For now it has the basic functionality and clear UI with protection against accidental clicks. After testing the app in the real environment a new set of changes to make was accomodated, so the project is still in the developing phase.
+The request to make it came from my father, a truck driver. The applications they have to use at work are often made without consideration of the harsh working environment and constant hurry. They often have small buttons, little text, too many colors, and a poorly planned structure. 
 
+## Design and research
+
+After researching the domain, including how and when the app is used during work (often with one hand, but not always) and going through several UI redesign iterations according to the requirements, I wrote my version of the tool. For now, it has basic functionality, a clear UI, and a protection against accidental clicks.
+
+## Current state
+
+After testing the app in the real environment, a new set of changes was identified. There are as well more features to be added so the project is still under development.
 
 
 | Login | Home | Menu |
