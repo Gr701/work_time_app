@@ -8,7 +8,7 @@ The request to make it came from my father, a truck driver. The applications the
 
 ## Design and research
 
-After researching the domain, including how and when the app is used during work (often with one hand, but not always) and going through several UI redesign iterations according to the requirements, I wrote my version of the tool. For now, it has basic functionality, a clear UI, and a protection against accidental clicks.
+After researching the domain, including how and when the app is used during work (often with one hand, but not always) and going through several UI redesign iterations according to the requirements, I wrote my version of the tool. For now, it has basic functionality, a clear UI, and a protection against accidental clicks (requires a confirmation press with a button moved).
 
 ## Current state
 
