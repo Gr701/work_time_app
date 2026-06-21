@@ -12,12 +12,12 @@ After researching the domain, including how and when the app is used during work
 
 ## Current state
 
-After testing the app in the real environment, a new set of changes was identified. There are as well more features to be added so the project is still under development.
+After testing the app in the real environment, a new set of changes was identified. There are as well more features to be added, so the project is still under development. New versions come based on the demand from the customer and the time supply of the developer.  
 
 
-| Login | Home | Menu |
-|-------------|-------------|-------------|
-| ![](screenshots/login_screen.jpg) | ![](screenshots/home_screen.jpg) | ![](screenshots/menu_screen.jpg) |
+| Login | Home | Home (break) | Menu |
+|-------------|-------------|-------------|-------------|
+| ![](screenshots/login_screen.jpg) | ![](screenshots/home_screen.jpg) | ![](screenshots/break_screen.jpg) | ![](screenshots/menu_screen.jpg) |
 
 ## Development hints
 
