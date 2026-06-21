@@ -35,9 +35,6 @@ public class MenuActivity extends AppCompatActivity {
 		});
 		Button endButton = findViewById(R.id.end_button);
 		String state = prefs.getString("state", "START");
-		if (state.equals("START") || state.equals("SHIFT_BRAKE")) {
-			endButton.setEnabled(false);
-		} 
 		endButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -58,6 +55,11 @@ public class MenuActivity extends AppCompatActivity {
 				startActivity(intent);
 			}
 		});
+		if (state.equals("START") || state.equals("SHIFT_BRAKE")) {
+			endButton.setEnabled(false);
+		} else {
+            logoutButton.setEnabled(false);
+        }
 	}
 	private void endWork() {
 		String state = prefs.getString("state", "START");

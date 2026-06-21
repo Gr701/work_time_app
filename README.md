@@ -19,3 +19,15 @@ After testing the app in the real environment, a new set of changes was identifi
 |-------------|-------------|-------------|
 | ![](screenshots/login_screen.jpg) | ![](screenshots/home_screen.jpg) | ![](screenshots/menu_screen.jpg) |
 
+## Development hints
+
+gradle installdebug - build and install on the connected device
+adb logcat - logs from device
+
+adb shell
+    run-as com.gr701.worktimeapp
+        toybox vi shared_prefs/WorkTimtePrefs.xml 
+
+## Bugs
+
+

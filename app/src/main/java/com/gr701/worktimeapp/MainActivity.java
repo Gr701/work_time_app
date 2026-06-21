@@ -5,7 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import android.widget.FrameLayout;
+import android.view.Gravity;
 import android.os.Handler;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,8 +18,11 @@ import android.util.Log;
 public class MainActivity extends AppCompatActivity {
 	private String state;
 	private TextView timer;
+    private TextView brakeTimer;
 	private Button myButton;
 	private long startTime = 0;
+    private long startBrakeTime = 0;
+    private int confirmationTime = 5;
 	private int currentShiftTime;
 	private SharedPreferences prefs;
 	private Handler timerHandler = new Handler();
@@ -36,6 +40,43 @@ public class MainActivity extends AppCompatActivity {
 			timerHandler.postDelayed(this, 1000);
 		}
 	};
+    private Runnable brakeTimerRunnable = new Runnable() {
+		private boolean isColonShown = true;
+		@Override 
+		public void run() {
+			int brakeTime = (int)(System.currentTimeMillis() - startBrakeTime);
+			int seconds = (brakeTime / 1000) % 60;
+			int minutes = (brakeTime / (1000 * 60)) % 60;
+			//int hours = workTime / (1000 * 60 * 60);
+			String colon = isColonShown ? ":" : " ";
+			isColonShown = !isColonShown;
+			brakeTimer.setText(String.format("%02d%s%02d", minutes, colon, seconds));
+			timerHandler.postDelayed(this, 1000);
+		}
+    };
+    private Runnable confirmationTimerRunnable = new Runnable() {
+        @Override
+        public void run() {
+            confirmationTime--;
+            if (confirmationTime <= 0) {
+                FrameLayout.LayoutParams buttonParams
+                    = (FrameLayout.LayoutParams)myButton.getLayoutParams();
+                buttonParams.gravity = Gravity.CENTER;
+				myButton.setLayoutParams(buttonParams);
+                if (state.equals("CONFIRM_WORK")) {
+                    state= "BRAKE";
+					myButton.setText("Lopeta tauko");
+                } else if (state.equals("CONFIRM_BRAKE")) {
+                    state = "WORK";
+					myButton.setText("Aloita tauko");
+                } else { // for debug 
+					myButton.setText("DEBUGHAPPEND");
+                }
+            } else {
+                timerHandler.postDelayed(this, 1000);
+            }
+        }
+    };
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,9 +90,12 @@ public class MainActivity extends AppCompatActivity {
 		}
 		setContentView(R.layout.activity_main);
 		timer = findViewById(R.id.time_text);
+        brakeTimer = findViewById(R.id.text_time_brake);
 		startTime = prefs.getLong("startTime", 0);
+        startBrakeTime = prefs.getLong("startBrakeTime", 0);
 		myButton = findViewById(R.id.work_button);
-		ConstraintLayout.LayoutParams buttonParams = (ConstraintLayout.LayoutParams)myButton.getLayoutParams();
+		FrameLayout.LayoutParams buttonParams
+            = (FrameLayout.LayoutParams)myButton.getLayoutParams();
 		myButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -63,24 +107,34 @@ public class MainActivity extends AppCompatActivity {
 					}
 					state = "CONFIRM_WORK";
 					myButton.setText("Vahvista");
-					buttonParams.horizontalBias = 0f;
+					buttonParams.gravity = Gravity.START | Gravity.TOP;
+                    confirmationTime = 5;    
+                    timerHandler.post(confirmationTimerRunnable);
 				} else if (state.equals("CONFIRM_WORK")) {
 					state = "WORK";
+                    timerHandler.removeCallbacks(confirmationTimerRunnable);
 					startTime = System.currentTimeMillis();
 					prefs.edit().putString("state", state).apply();
 					prefs.edit().putLong("startTime", startTime).apply();
 					myButton.setText("Aloita tauko");
-					buttonParams.horizontalBias = 0.5f;
+					buttonParams.gravity = Gravity.CENTER;
+                    stopBrake();
 					timerHandler.post(timerRunnable);
 				} else if (state.equals("WORK")) {
 					state = "CONFIRM_BRAKE";
 					myButton.setText("Vahvista");
-					buttonParams.horizontalBias = 0f;
+					buttonParams.gravity = Gravity.START | Gravity.TOP;
+                    confirmationTime = 5;    
+                    timerHandler.post(confirmationTimerRunnable);
 				} else if (state.equals("CONFIRM_BRAKE")) {
 					state = "BRAKE";
+                    timerHandler.removeCallbacks(confirmationTimerRunnable);
+                    timerHandler.post(brakeTimerRunnable);
 					prefs.edit().putString("state", state).apply();
+					startBrakeTime = System.currentTimeMillis();
+					prefs.edit().putLong("startBrakeTime", startBrakeTime).apply();
 					myButton.setText("Lopeta tauko");
-					buttonParams.horizontalBias = 0.5f;
+					buttonParams.gravity = Gravity.CENTER;
 					stopTimer();
 					setStaticTimerText();
 				}
@@ -101,9 +155,13 @@ public class MainActivity extends AppCompatActivity {
 		super.onResume();
 		state = prefs.getString("state", "START");
 		currentShiftTime = prefs.getInt("currentShiftTime", 0);
+        FrameLayout.LayoutParams buttonParams = (FrameLayout.LayoutParams)myButton.getLayoutParams();
+        buttonParams.gravity = Gravity.CENTER;
+        myButton.setLayoutParams(buttonParams);
+        timerHandler.removeCallbacks(confirmationTimerRunnable);
+        stopBrake();
 		if (state.equals("START")) {
 			timerHandler.removeCallbacks(timerRunnable);
-			//timer.setText("00:00");
 			myButton.setText("Aloita työ");
 			setStaticTimerText();
 		} else if (state.equals("WORK")) {
@@ -113,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
 			myButton.setText("Aloita tauko");
 		} else if (state.equals("BRAKE")) {
 			myButton.setText("Lopeta tauko");
+			timerHandler.post(brakeTimerRunnable);
 			setStaticTimerText();
 		} else if (state.equals("START_SHIFT_BRAKE")) {
 			state = "SHIFT_BRAKE";
@@ -127,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
 			if (!startDate.equals(currentDate)) {
 				saveStatistics();
 				state = "START";
-				prefs.edit().putString("state", state);
+				prefs.edit().putString("state", state).apply();
 			}
 			setStaticTimerText();
 		} else if (state.equals("START_SAVE_STAT")) {
@@ -143,7 +202,9 @@ public class MainActivity extends AppCompatActivity {
 			myButton.setText("Aloita työ");
 			saveStatistics();
 			setStaticTimerText();
-		}
+		} else {
+			myButton.setText("WHAT IS GOIN ON");
+        }
 	}
 	private void setStaticTimerText() {
 		int minutes = (currentShiftTime / (1000 * 60)) % 60;
@@ -155,6 +216,10 @@ public class MainActivity extends AppCompatActivity {
 		currentShiftTime += (int)(System.currentTimeMillis() - startTime);
 		prefs.edit().putInt("currentShiftTime", currentShiftTime).apply();
 	}
+    private void stopBrake() {
+        timerHandler.removeCallbacks(brakeTimerRunnable);
+        brakeTimer.setText("");
+    }
 	private void saveStatistics() {
 		String statDates = prefs.getString("statDates", "");
 		String statTimes = prefs.getString("statTimes", "");
