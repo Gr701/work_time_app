@@ -5,4 +5,5 @@ Main.java
 session.vim
 cheats
 requirements
-
+local.properties
+.idea/
